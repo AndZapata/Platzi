@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 class BadgeForm extends React.Component {
   state = {
@@ -26,7 +26,7 @@ class BadgeForm extends React.Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <h1>New Attendant</h1>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
@@ -81,9 +81,10 @@ class BadgeForm extends React.Component {
 
           <button
             className="btn btn-primary"
-            onClick={this.handleClick}>Save</button>
+            onClick={this.handleClick}>Save
+          </button>
         </form>
-      </div>
+      </Fragment>
     );
   }
 }
