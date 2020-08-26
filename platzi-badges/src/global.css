@@ -71,7 +71,7 @@ a.link-unstyled:hover {
     box-shadow: 0 0 0 0.2rem rgba(255, 64, 64, 0.5);
 }
 
-.bg-dark {
+.bg-dark, .text-info {
     background-color: #1c3643 !important;
 }
 

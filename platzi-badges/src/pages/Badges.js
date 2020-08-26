@@ -4,6 +4,8 @@ import confLogo from "../images/badge-header.svg";
 import BadgesList from "../components/BadgesList";
 import { Link } from "react-router-dom";
 import Loader from "../components/Loader";
+import api from "../api";
+import PageError from "../components/PageError";
 
 class Badges extends Component {
   constructor(props) {
@@ -11,31 +13,21 @@ class Badges extends Component {
     console.log("1. Constructor()");
 
     this.state = {
-      nextPage: 1,
       loading: true,
       error: null,
-      data: {
-        results: [],
-      },
+      data: undefined,
     };
   }
 
-  fetchCharacters = async () => {
+  fetchData = async () => {
     this.setState({ loading: true, error: null });
 
     try {
-      const response = await fetch(
-        `https://rickandmortyapi.com/api/character?page=${this.state.nextPage}`
-      );
-      const data = await response.json();
+      const data = await api.badges.list();
 
       this.setState({
         loading: false,
-        data: {
-          info: data.info,
-          results: [].concat(this.state.data.results, data.results),
-        },
-        nextPage: this.state.nextPage + 1,
+        data: data,
       });
     } catch (error) {
       this.setState({
@@ -48,7 +40,7 @@ class Badges extends Component {
   componentDidMount() {
     console.log("3. ComponentDidMount()");
     this.timeOutId = setTimeout(() => {
-      this.fetchCharacters();
+      this.fetchData();
     }, 3000);
   }
 
@@ -71,7 +63,11 @@ class Badges extends Component {
 
   render() {
     if (this.state.error) {
-      return `Error: ${this.state.error.message}`;
+      return <PageError error={this.state.error}/>;
+    }
+
+    if (this.state.loading) {
+      return <Loader />;
     }
 
     return (
@@ -98,19 +94,6 @@ class Badges extends Component {
           <div className="Badges__list">
             <div className="Badges__container">
               <BadgesList badges={this.state.data} />
-              {this.state.loading && (
-                <div className="loader">
-                  <Loader />
-                </div>
-              )}
-              {!this.state.loading && (
-                <button
-                  className="btn btn-success"
-                  onClick={() => this.fetchCharacters()}
-                >
-                  Load More!
-                </button>
-              )}
             </div>
           </div>
         </div>
